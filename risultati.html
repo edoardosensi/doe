@@ -13,19 +13,28 @@
   </div>
   <script>
   (async function () {
-    const pages = await fetch('pages.json').then(r => r.json());
-    const query = new URLSearchParams(window.location.search).get("q") || "";
+    // Elenco delle pagine da cercare
+    const pages = [
+      "pensare.html",
+      "parlare.html",
+      "scrivere.html"
+    ];
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get("q") || "";
     document.getElementById("search-term").textContent = query;
 
     const resultsDiv = document.getElementById("results");
     let foundAny = false;
 
+    // Funzione per evidenziare la parola trovata
     function highlight(text, word) {
       if (!word) return text;
       const regex = new RegExp(`(${word})`, 'gi');
       return text.replace(regex, '<mark>$1</mark>');
     }
 
+    // Cerca la parola in ogni pagina
     await Promise.all(pages.map(async url => {
       try {
         const resp = await fetch(url);
@@ -45,7 +54,7 @@
           resultsDiv.appendChild(div);
         }
       } catch (e) {
-        // Se una pagina non si carica, ignora e continua
+        // errore nel fetch, ignora
       }
     }));
 
