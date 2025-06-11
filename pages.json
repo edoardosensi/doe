@@ -1,0 +1,24 @@
+// generate-pages-list.js
+const fs = require('fs');
+const path = require('path');
+
+const ROOT = '.'; // Cambia se hai una cartella diversa (es: 'public')
+const IGNORE = ['node_modules', '.git', 'pages.json', 'risultati.html']; // aggiungi file/dir da ignorare
+
+function findHtmlFiles(dir) {
+  let results = [];
+  fs.readdirSync(dir).forEach(file => {
+    const filePath = path.join(dir, file);
+    const stat = fs.statSync(filePath);
+    if (stat && stat.isDirectory() && !IGNORE.includes(file)) {
+      results = results.concat(findHtmlFiles(filePath));
+    } else if (stat && stat.isFile() && file.endsWith('.html') && !IGNORE.includes(file)) {
+      results.push(path.relative(ROOT, filePath).replace(/\\/g, '/'));
+    }
+  });
+  return results;
+}
+
+const htmlFiles = findHtmlFiles(ROOT);
+fs.writeFileSync('pages.json', JSON.stringify(htmlFiles, null, 2));
+console.log('pages.json generato:', htmlFiles);
