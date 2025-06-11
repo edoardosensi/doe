@@ -2,22 +2,32 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Home</title>
+  <title>Index</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="page">
-    <h1>Homepage</h1>
-    <div class="search-box">
-      <input type="text" id="site-search-input" class="search-input" placeholder="Cerca...">
-      <button id="site-search-btn" class="search-btn">
-        <svg width="20" height="20"><circle cx="9" cy="9" r="7" stroke="#333" stroke-width="2" fill="none"/><line x1="14" y1="14" x2="19" y2="19" stroke="#333" stroke-width="2"/></svg>
-      </button>
-    </div>
+    <h2>Ciao, questo è doe</h2>
     <div class="container">
-      <a href="pensare.html" class="box">Pensare</a>
-      <a href="parlare.html" class="box">Parlare</a>
-      <a href="scrivere.html" class="box">Scrivere</a>
+      <a href="pensare.html" class="box">
+        <h1>pensare</h1>
+      </a>
+      <a href="parlare.html" class="box" id="parlare-box">
+        <h1>parlare</h1>
+      </a>
+      <a href="scrivere.html" class="box">
+        <h1>scrivere</h1>
+      </a>
+    </div>
+    <!-- Box di ricerca sotto tutti i box -->
+    <div class="search-box">
+      <input type="text" placeholder="Cerca su doe" class="search-input" id="site-search-input">
+      <button class="search-btn" id="site-search-btn" aria-label="Cerca">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <circle cx="8" cy="8" r="7" stroke="#111" stroke-width="2"/>
+          <line x1="13" y1="13" x2="17" y2="17" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
     </div>
   </div>
   <script src="main.js"></script>
