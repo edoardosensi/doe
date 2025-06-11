@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Risultati ricerca</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="page">
+    <h2>Risultati della ricerca per: <span id="search-term"></span></h2>
+    <div id="results"></div>
+    <a href="index.html">Torna alla home</a>
+  </div>
+  <script>
+  (async function () {
+    const pages = await fetch('pages.json').then(r => r.json());
+    const query = new URLSearchParams(window.location.search).get("q") || "";
+    document.getElementById("search-term").textContent = query;
+
+    const resultsDiv = document.getElementById("results");
+    let foundAny = false;
+
+    function highlight(text, word) {
+      if (!word) return text;
+      const regex = new RegExp(`(${word})`, 'gi');
+      return text.replace(regex, '<mark>$1</mark>');
+    }
+
+    await Promise.all(pages.map(async url => {
+      try {
+        const resp = await fetch(url);
+        const html = await resp.text();
+        const doc = new DOMParser().parseFromString(html, "text/html");
+        const body = doc.body.innerText || "";
+        const regex = new RegExp(query, 'gi');
+        let match;
+        while ((match = regex.exec(body)) !== null) {
+          foundAny = true;
+          const start = Math.max(0, match.index - 40);
+          const end = Math.min(body.length, match.index + 40);
+          const snippet = body.substring(start, end);
+          const div = document.createElement('div');
+          div.className = "result";
+          div.innerHTML = `<strong>${url}</strong>: ...${highlight(snippet, query)}... <a href="${url}" target="_blank">Apri</a>`;
+          resultsDiv.appendChild(div);
+        }
+      } catch (e) {
+        // Se una pagina non si carica, ignora e continua
+      }
+    }));
+
+    if (!foundAny) {
+      resultsDiv.innerHTML = "<p>Nessun risultato trovato.</p>";
+    }
+  })();
+  </script>
+</body>
+</html>
