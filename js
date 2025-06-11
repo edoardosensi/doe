@@ -9,10 +9,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  if (searchBtn && searchInput) {
-    searchBtn.addEventListener('click', doSearch);
+  if (searchInput && searchBtn) {
+    searchBtn.addEventListener('click', function (e) {
+      e.preventDefault(); // Previene submit se usato dentro un form
+      doSearch();
+    });
+
     searchInput.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') {
+        e.preventDefault(); // Previene submit se usato dentro un form
         doSearch();
       }
     });
