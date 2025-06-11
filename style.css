@@ -84,3 +84,15 @@ h1 {
 .search-btn svg {
   display: block;
 }
+
+/* --- RISULTATI DELLA RICERCA --- */
+.result {
+  margin: 14px 0;
+  padding: 10px;
+  background: #f4f4f4;
+  border-radius: 8px;
+}
+mark {
+  background: #ffe066;
+  color: #111;
+}
