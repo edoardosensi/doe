@@ -13,7 +13,6 @@
   </div>
   <script>
   (async function () {
-    // Elenco delle pagine da cercare
     const pages = [
       "pensare.html",
       "parlare.html",
@@ -25,36 +24,51 @@
     document.getElementById("search-term").textContent = query;
 
     const resultsDiv = document.getElementById("results");
-    let foundAny = false;
+
+    if (!query) {
+      resultsDiv.innerHTML = "<p>Nessun risultato trovato.</p>";
+      return;
+    }
+
+    // Funzione per evitare problemi con caratteri speciali in regex
+    function escapeRegExp(string) {
+      return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
 
     // Funzione per evidenziare la parola trovata
     function highlight(text, word) {
       if (!word) return text;
-      const regex = new RegExp(`(${word})`, 'gi');
+      const regex = new RegExp(`(${escapeRegExp(word)})`, 'gi');
       return text.replace(regex, '<mark>$1</mark>');
     }
 
-    // Cerca la parola in ogni pagina
+    let foundAny = false;
+
     await Promise.all(pages.map(async url => {
       try {
         const resp = await fetch(url);
+        if (!resp.ok) throw new Error("Fetch error");
         const html = await resp.text();
         const doc = new DOMParser().parseFromString(html, "text/html");
+        const title = doc.querySelector('title') ? doc.querySelector('title').innerText : url;
         const body = doc.body.innerText || "";
-        const regex = new RegExp(query, 'gi');
-        let match;
-        while ((match = regex.exec(body)) !== null) {
+        const regex = new RegExp(escapeRegExp(query), 'gi');
+        const match = regex.exec(body);
+        if (match) {
           foundAny = true;
           const start = Math.max(0, match.index - 40);
           const end = Math.min(body.length, match.index + 40);
           const snippet = body.substring(start, end);
           const div = document.createElement('div');
           div.className = "result";
-          div.innerHTML = `<strong>${url}</strong>: ...${highlight(snippet, query)}... <a href="${url}" target="_blank">Apri</a>`;
+          div.innerHTML = `<strong>${title}</strong>: ...${highlight(snippet, query)}... <a href="${url}" target="_blank">Apri</a>`;
           resultsDiv.appendChild(div);
         }
       } catch (e) {
-        // errore nel fetch, ignora
+        // Se vuoi mostrare errore di fetch:
+        // const errDiv = document.createElement('div');
+        // errDiv.textContent = `Impossibile cercare in ${url}`;
+        // resultsDiv.appendChild(errDiv);
       }
     }));
 
