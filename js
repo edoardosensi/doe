@@ -2,12 +2,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const searchInput = document.getElementById('site-search-input');
   const searchBtn = document.getElementById('site-search-btn');
 
-  // Premi Enter o clicca su lente: per ora mostra un alert
   function doSearch() {
     const query = searchInput.value.trim();
     if (query.length > 0) {
       alert('Hai cercato: ' + query);
-      // Qui puoi aggiungere la logica vera di ricerca!
+      // Qui puoi aggiungere la logica vera di ricerca
     }
   }
 
