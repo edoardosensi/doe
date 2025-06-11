@@ -5,15 +5,16 @@ document.addEventListener('DOMContentLoaded', function () {
   function doSearch() {
     const query = searchInput.value.trim();
     if (query.length > 0) {
-      alert('Hai cercato: ' + query);
-      // Qui puoi aggiungere la logica vera di ricerca
+      window.location.href = `risultati.html?q=${encodeURIComponent(query)}`;
     }
   }
 
-  searchBtn.addEventListener('click', doSearch);
-  searchInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
-      doSearch();
-    }
-  });
+  if (searchBtn && searchInput) {
+    searchBtn.addEventListener('click', doSearch);
+    searchInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        doSearch();
+      }
+    });
+  }
 });
