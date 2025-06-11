@@ -11,13 +11,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   if (searchInput && searchBtn) {
     searchBtn.addEventListener('click', function (e) {
-      e.preventDefault(); // Previene submit se usato dentro un form
+      e.preventDefault();
       doSearch();
     });
 
     searchInput.addEventListener('keydown', function (e) {
       if (e.key === 'Enter') {
-        e.preventDefault(); // Previene submit se usato dentro un form
+        e.preventDefault();
         doSearch();
       }
     });
